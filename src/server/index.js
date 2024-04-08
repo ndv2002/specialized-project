@@ -1,9 +1,40 @@
-const express = require('express');
-const os = require('os');
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
-app.use(express.static('dist'));
-app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
 
-app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
+app.use(cors(corsOptions));
+
+// parse requests of content-type - application/json
+app.use(express.json());
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+const db = require("./models");
+const Role = db.role;
+db.sequelize.sync()
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
+
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to Fire Detection application." });
+});
+
+require("./routes/user.routes.js")(app);
+require('./routes/auth.routes.js')(app);
+
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
