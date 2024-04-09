@@ -1,22 +1,26 @@
 var bcrypt = require("bcryptjs");
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("user", {
-    Name: {
+  const User = sequelize.define("users", {
+    first_name: {
       type: Sequelize.STRING(255),
-      field:'Name'
+      field:'first_name'
     },
-    Username: {
+    last_name: {
+      type: Sequelize.STRING(255),
+      field:'last_name'
+    },
+    username: {
       type: Sequelize.STRING(255),
       primaryKey: true,
-      field:'Username'
+      field:'username'
     },
     Password: {
       type: Sequelize.STRING(255),
       allowNull: false,
-      field:'Password'
+      field:'password'
     }
   },{
-    tableName: 'user',
+    tableName: 'users',
     freezeTableName: true,
 
     // If don't want createdAt
@@ -28,7 +32,7 @@ module.exports = (sequelize, Sequelize) => {
 
   User.addHook(
     "beforeUpdate",
-    user => (user.Password = bcrypt.hashSync(user.Password, 8))
+    user => (user.password = bcrypt.hashSync(user.Password, 8))
   );
 
   return User;

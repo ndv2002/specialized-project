@@ -1,12 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
-    const Role = sequelize.define("role", {
-      Name: {
+    const Role = sequelize.define("roles", {
+      name: {
         type: Sequelize.STRING(255),
         primaryKey:true,
-        field:'Name'
+        field:'name'
       }
     },{
-      tableName: 'role',
+      tableName: 'roles',
       freezeTableName: true,
       // If don't want createdAt
       createdAt: false,
