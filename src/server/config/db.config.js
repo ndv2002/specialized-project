@@ -13,9 +13,9 @@
 // };
 module.exports = {
   HOST: "us-cluster-east-01.k8s.cleardb.net",
-  USER: "bb640c66535559",
-  PASSWORD: "7fe53b76",
-  DB: "heroku_fa775146554d665",
+  USER: "b90a58dea7840b",
+  PASSWORD: "1e39325d",
+  DB: "heroku_7fdfb091a8162d8",
   dialect: "mysql",
   pool: {
     max: 5,
