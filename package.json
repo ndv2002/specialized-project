@@ -4,12 +4,13 @@
   "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
   "main": "src/server/index.js",
   "engines": {
-    "node": "16.16.0"
+    "node": "16.16.0",
+    "npm": "8.11.0"
   },
   "scripts": {
     "build": "webpack --mode production --openssl-legacy-provider",
     "spare_start": "npm run build && node src/server/index.js",
-    "start": "react-scripts start --openssl-legacy-provider",
+    "start": "node src/server/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot --openssl-legacy-provider",
     "server": "nodemon src/server/index.js --openssl-legacy-provider",
     "dev": "concurrently \"npm run server\" \"npm run client\" --openssl-legacy-provider"
@@ -24,9 +25,10 @@
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.2",
+    "npm": "^8.11.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^3.0.1",
     "sequelize": "^6.37.1"
   },
   "devDependencies": {
@@ -44,13 +46,13 @@
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "file-loader": "^3.0.0",
+    "file-loader": "~6.0.0",
     "html-webpack-plugin": "^5.5.3",
     "nodemon": "^3.0.1",
     "style-loader": "^0.23.0",
-    "url-loader": "^1.0.1",
+    "url-loader": "~4.0.0",
     "webpack": "^5.91.0",
-    "webpack-cli": "^3.0.8",
+    "webpack-cli": "~4.0.0",
     "webpack-dev-server": "^4.15.1"
   }
 }
