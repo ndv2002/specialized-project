@@ -11,16 +11,18 @@ var bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
   // Save User to Database
   User.create({
-    Name:req.body.Name,
-    Username: req.body.Username,
-    Password: bcrypt.hashSync(req.body.Password, 8)
+    first_name:req.body.first_name,
+    last_name: req.body.last_name,
+    password: bcrypt.hashSync(req.body.password, 8),
+    username: req.body.username,
+    role: req.body.role
   })
     .then(user => {
-      if (req.body.Role) {
+      if (req.body.role) {
         Role.findAll({
           where: {
-            Name: {
-              [Op.eq]: req.body.Role
+            name: {
+              [Op.eq]: req.body.role
             }
           }
         }).then(async(roles) => {

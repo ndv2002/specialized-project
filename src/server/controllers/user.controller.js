@@ -145,35 +145,48 @@ var bcrypt = require("bcryptjs");
 //   });  
 // };
 
-exports.create = (req, res) => {
+// exports.create = (req, res) => {
   
 
-  // Create a User
-  const user = {
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    username: req.body.username,
-    password: req.body.password,
-    role:req.body.role
-  };
+//   // Create a User
+//   const user = {
+//     first_name: req.body.first_name,
+//     last_name: req.body.last_name,
+//     username: req.body.username,
+//     password: req.body.password,
+//     role:req.body.role
+//   };
 
-  // Save Tutorial in the database
-  User.create(user)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the User."
-      });
-    });
-};
+//   // Save Tutorial in the database
+//   User.create(user)
+//     .then(data => {
+//       res.send(data);
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message:
+//           err.message || "Some error occurred while creating the User."
+//       });
+//     });
+// };
 
 exports.findAll = (req, res) => {
   
+  let where = {};
+  if(req.query.username){
+    where['username'] = { [Op.eq]: req.query.username };
+  }
 
-  User.findAll()
+  if(req.query.first_name) {
+      where['first_name'] = {[Op.like]: req.query.first_name};
+  }
+
+  if(req.query.last_name) {
+    where['last_name'] = {[Op.like]: req.query.last_name};
+  }
+  User.findAll(
+    {where}
+  )
     .then(data => {
       res.send(data);
     })
@@ -185,38 +198,56 @@ exports.findAll = (req, res) => {
     });
 };
 
-exports.findOne = (req, res) => {
-  const username = req.params.username;
+// exports.findOneByUsername = (req, res) => {
+//   const username = req.query.username;
   
-  User.findAll({
-    where: {
-      username: {
-        [Op.eq]: username
-      }
-    }
-  })
-    .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find User with username=${Username}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error retrieving User with username=" + Username
-      });
-    });
-};
+//   User.findAll({
+//     where: {
+//       username: {
+//         [Op.eq]: username
+//       }
+//     }
+//   })
+//     .then(data => {
+//       if (data) {
+//         res.send(data);
+//       } else {
+//         res.status(404).send({
+//           message: `Cannot find User with username=${username}.`
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message: "Error retrieving User with username=" + username
+//       });
+//     });
+// };
+
+
 
 exports.update = (req, res) => {
-  const Username = req.params.username;
+  const username = req.params.username;
 
-  User.update(req.body, {
-    where: { Username: Username }
-  })
+  const updateFields = {
+    first_name: req.body.first_name ? req.body.first_name : undefined,
+    last_name: req.body.last_name ? req.body.last_name : undefined,
+    password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : undefined
+    // Add more fields as needed
+  };
+  
+  const updatedValues = Object.keys(updateFields).reduce((acc, key) => {
+    if (updateFields[key] !== undefined) {
+      acc[key] = updateFields[key];
+    }
+    return acc;
+  }, {});
+  User.update(
+    updatedValues, 
+    {
+      where: { username: username },
+    }
+  )
     .then(num => {
       if (num == 1) {
         res.send({
@@ -224,13 +255,13 @@ exports.update = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot update User with username=${Username}. Maybe User was not found or req.body is empty!`
+          message: `Cannot update User with username=${username}. Maybe User was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating User with username=" + Username
+        message: "Error updating User with username=" + username
       });
     });
 };

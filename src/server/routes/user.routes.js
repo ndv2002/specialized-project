@@ -1,18 +1,19 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
+const bodyParser = require('body-parser');
+const express = require('express');
+
 
 module.exports = function(app) {
 
 
-  var router = require("express").Router();
+  var router = express();
+  router.use(bodyParser.urlencoded({ extended: false }));
+  router.use(bodyParser.json());
 
-
-  // Retrieve all Users
+  
+  // Retrieve all users
   router.get("/", controller.findAll);
-
-
-  // Retrieve a single Tutorial with Username
-  router.get("/:username", controller.findOne);
 
   // Update a User with username
   router.put("/:username", controller.update);
