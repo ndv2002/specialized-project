@@ -1,6 +1,6 @@
 var bcrypt = require("bcryptjs");
 module.exports = (sequelize, Sequelize) => {
-  const Camera = sequelize.define("cameras_sensors", {
+  const Camera = sequelize.define("camera", {
     name: {
       type: Sequelize.STRING(60),
       field:'name'

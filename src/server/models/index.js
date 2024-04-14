@@ -37,6 +37,18 @@ db.user.belongsToMany(db.role, {
   otherKey: "role"
 });
 
+db.camera.belongsToMany(db.user, {
+  through: "users_cameras",
+  foreignKey: "camera_sensor_ip",
+  otherKey: "username"
+});
+db.user.belongsToMany(db.camera, {
+  through: "users_cameras",
+  foreignKey: "username",
+  otherKey: "camera_sensor_ip"
+});
+
+
 db.ROLES = ["User", "Admin"];
 
 module.exports = db;

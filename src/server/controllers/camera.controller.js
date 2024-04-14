@@ -1,6 +1,7 @@
 // const User = require("../models/user.model.js");
 const db = require("../models");
 const Camera = db.camera;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 checkDuplicateIPAddress = (req, res, next) => {
@@ -45,7 +46,7 @@ exports.create = async(req, res) => {
     else{
     Camera.create(camera)
         .then(data => {
-        res.send(data);
+        res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
         })
         .catch(err => {
         res.status(500).send({
@@ -67,7 +68,7 @@ exports.findAll = (req, res) => {
     {where}
   )
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -118,11 +119,11 @@ exports.update = async(req, res) => {
         )
             .then(num => {
             if (num == 1) {
-                res.send({
+                res.status(200).send({
                 message: "Camera was updated successfully."
                 });
             } else {
-                res.send({
+                res.status(500).send({
                 message: `Cannot update Camera with ip_address=${ip_address}. Maybe Camera was not found or req.body is empty!`
                 });
             }
@@ -135,45 +136,69 @@ exports.update = async(req, res) => {
     }    
 };
 
-exports.delete = (req, res) => {
-  const Username = req.params.username;
-
-  User.destroy({
-    where: { Username:Username }
+exports.findUser = (req, res) => {
+  
+  const ip_address=req.params.ip_address;
+  Camera.findAll({
+    where:{
+        ip_address:{[Op.eq]:ip_address},
+    },
+    include:
+      {                               
+          model: User
+      },
+      
   })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "User was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete User with username=${Username}. Maybe User was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete User with username=" + Username
-      });
-    });
-};
-
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-      res.send({ message: `${nums} users were deleted successfully!` });
+    .then(data => {
+      res.status(200).send(data[0]['users']);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all users."
+          err.message || "Some error occurred while retrieving users."
       });
     });
 };
+
+// exports.delete = (req, res) => {
+//   const Username = req.params.username;
+
+//   User.destroy({
+//     where: { Username:Username }
+//   })
+//     .then(num => {
+//       if (num == 1) {
+//         res.send({
+//           message: "User was deleted successfully!"
+//         });
+//       } else {
+//         res.send({
+//           message: `Cannot delete User with username=${Username}. Maybe User was not found!`
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message: "Could not delete User with username=" + Username
+//       });
+//     });
+// };
+
+// exports.deleteAll = (req, res) => {
+//   User.destroy({
+//     where: {},
+//     truncate: false
+//   })
+//     .then(nums => {
+//       res.send({ message: `${nums} users were deleted successfully!` });
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message:
+//           err.message || "Some error occurred while removing all users."
+//       });
+//     });
+// };
 
 
 

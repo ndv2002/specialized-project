@@ -1,6 +1,7 @@
 // const User = require("../models/user.model.js");
 const db = require("../models");
 const User = db.user;
+const Camera=db.camera;
 const Op = db.Sequelize.Op;
 var bcrypt = require("bcryptjs");
 // // Create and Save a new Tutorial
@@ -188,7 +189,7 @@ exports.findAll = (req, res) => {
     {where}
   )
     .then(data => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch(err => {
       res.status(500).send({
@@ -250,11 +251,11 @@ exports.update = (req, res) => {
   )
     .then(num => {
       if (num == 1) {
-        res.send({
+        res.status(200).send({
           message: "User was updated successfully."
         });
       } else {
-        res.send({
+        res.status(500).send({
           message: `Cannot update User with username=${username}. Maybe User was not found or req.body is empty!`
         });
       }
@@ -266,45 +267,97 @@ exports.update = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
-  const Username = req.params.username;
-
-  User.destroy({
-    where: { Username:Username }
+exports.findCamera = (req, res) => {
+  
+  const username=req.params.username;
+  User.findAll({
+    where:{
+        username:{[Op.eq]:username},
+    },
+    include:
+      {                               
+          model: Camera
+      },
+      
   })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "User was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete User with username=${Username}. Maybe User was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete User with username=" + Username
-      });
-    });
-};
-
-exports.deleteAll = (req, res) => {
-  User.destroy({
-    where: {},
-    truncate: false
-  })
-    .then(nums => {
-      res.send({ message: `${nums} users were deleted successfully!` });
+    .then(data => {
+      res.status(200).send(data[0]['cameras']);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while removing all users."
+          err.message || "Some error occurred while retrieving cameras."
       });
     });
 };
+
+exports.addCamera = (req, res) => {
+  
+  const username=req.params.username;
+  const ip_address=req.params.ip_address;
+
+  User.findByPk(username)
+    .then((user) => {
+      if (!user) {
+        res.status(500).send("User not found!");
+        
+      }
+      return Camera.findByPk(ip_address).then((camera) => {
+        if (!camera) {
+          res.status(500).send("Camera not found!");
+          
+        }
+
+
+        user.addCamera(camera);
+        res.status(200).send({message:`Added camera ip_address=${ip_address} to user username=${username}`});
+        
+      });
+    })
+    .catch((err) => {
+      res.status(500).send(">> Error while adding camera to user: ", err);
+    });
+};
+
+// exports.delete = (req, res) => {
+//   const Username = req.params.username;
+
+//   User.destroy({
+//     where: { Username:Username }
+//   })
+//     .then(num => {
+//       if (num == 1) {
+//         res.send({
+//           message: "User was deleted successfully!"
+//         });
+//       } else {
+//         res.send({
+//           message: `Cannot delete User with username=${Username}. Maybe User was not found!`
+//         });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message: "Could not delete User with username=" + Username
+//       });
+//     });
+// };
+
+// exports.deleteAll = (req, res) => {
+//   User.destroy({
+//     where: {},
+//     truncate: false
+//   })
+//     .then(nums => {
+//       res.send({ message: `${nums} users were deleted successfully!` });
+//     })
+//     .catch(err => {
+//       res.status(500).send({
+//         message:
+//           err.message || "Some error occurred while removing all users."
+//       });
+//     });
+// };
 
 exports.allAccess = (req, res) => {
   res.status(200).send("Public Content.");

@@ -18,6 +18,12 @@ module.exports = function(app) {
   // Update a User with username
   router.put("/:username", controller.update);
 
+  //Retrieve all cameras associated with username
+  router.get("/:username/cameras", controller.findCamera);
+
+  //Add cameras associated with username
+  router.post("/:username/cameras/:ip_address", controller.addCamera);
+
   // // Delete a User with username 
   // router.delete("/:username", controller.delete);
 

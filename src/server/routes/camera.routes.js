@@ -20,6 +20,11 @@ module.exports = function(app) {
   // Update a camera with ip_address
   router.put("/:ip_address", controller.update);
 
+  //Retrieve all users associated with camera by ip address
+  router.get("/:ip_address/users", controller.findUser);
+
+  
+
   // // Delete a User with username 
   // router.delete("/:username", controller.delete);
 
