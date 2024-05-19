@@ -1,4 +1,4 @@
-const controller = require("../controllers/camera.controller");
+const controller = require("../controllers/data.controller");
 const bodyParser = require('body-parser');
 const express = require('express');
 
@@ -12,13 +12,9 @@ module.exports = function(app) {
 
   
   // Create camera
-
-   
   router.post("/" , controller.create);
 
-  
-
-
+  // Retrieve all cameras
   router.get("/", controller.findAll);
 
   // Update a camera with ip_address
@@ -35,7 +31,7 @@ module.exports = function(app) {
   // // Delete all Tutorials
   // router.delete("/", controller.deleteAll);
 
-  app.use('/api/cameras', router);
+  app.use('/api/datas', router);
 
 
 };

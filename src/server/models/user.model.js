@@ -18,7 +18,12 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING(255),
       allowNull: false,
       field:'password'
-    }
+    },
+    phone: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      field:'phone'
+    },
   },{
     tableName: 'users',
     freezeTableName: true,

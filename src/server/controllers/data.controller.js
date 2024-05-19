@@ -3,88 +3,40 @@ const db = require("../models");
 const Camera = db.camera;
 const User = db.user;
 const Op = db.Sequelize.Op;
-
-checkDuplicateIPAddress = (req, res, next) => {
-    // Username
-    Camera.findOne({
-      where: {
-        ip_address: req.body.ip_address
-      }
-    }).then(camera => {
-      if (camera) {
-        res.status(400).send({
-          message: "Failed! IP address is already in use!"
-        });
-        return;
-      }
-      next();
-      
-    });
-  };
-
+const {PythonShell} = require('python-shell');
+const spawn=require('child_process').spawn;
 exports.create = async(req, res) => {
   
-    
-    const camera = {
-        name: req.body.name,
-        location: req.body.location,
-        ip_address: req.body.ip_address
-        
-    };
-
-    // const checkDuplicate = await Camera.findOne({ 
-    //     where: {
-    //         ip_address: {
-    //             [Op.eq]: req.body.ip_address
-    //         }
-    //     } });
-    
-    // if (checkDuplicate) {
-    //     res.status(500).send({ error: "This IP address is already in use." });
-    // }
-
- 
-    Camera.create(camera)
-        .then(data => {
-        res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
-        })
-        .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || "Some error occurred while creating the camera."
-        });
-        });
+   
     
 };
 
-exports.findAll = (req, res) => {
-  
-  let where = {};
+exports.findAll = (req, res) => {   
 
-  if(req.query.ip_address) {
-    where['ip_address'] = {[Op.eq]: req.query.ip_address};
-  }
+    // PythonShell.run('./src/server/AI/image_test.py', null).then(messages=>{
+    //     console.log('finished');
+    //   });
 
-  if(req.query.name) {
-    where['name'] = {[Op.like]:'%' + req.query.name + '%' };
-  }
+    
 
-  if(req.query.location) {
-    where['location'] = {[Op.like]:'%' +  req.query.location + '%'};
-  }
-
-  Camera.findAll(
-    {where}
-  )
-    .then(data => {
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving cameras."
+      // E.g : http://localhost:3000/name?firstname=van&lastname=nghia
+      var process = spawn('python', [
+        './src/server/AI/image_test.py',
+        'abc'
+      ]);
+      process.stdout.on('data', function(data) {
+        console.log("stdout: "+data.toString());
+    
+        // res.send(data.toString());
+      });  
+      // const result = process.stdout?.toString()?.trim();
+      // console.log(result);   
+      process.stderr.on('data', function(data) {
+        console.log("stderr: "+data.toString());
+    
+        // res.send(data.toString());
       });
-    });
+  
 };
 
 

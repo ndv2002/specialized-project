@@ -18,18 +18,23 @@
   "author": "Sandeep Raveesh",
   "license": "ISC",
   "dependencies": {
+    "@vonage/server-sdk": "^3.14.0",
     "babel-polyfill": "^6.26.0",
     "bcryptjs": "^2.4.3",
+    "child_process": "^1.0.2",
     "cors": "^2.8.5",
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.2",
+    "node-fetch": "^2.7.0",
     "npm": "^8.11.0",
+    "python-shell": "^5.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "^3.0.1",
-    "sequelize": "^6.37.1"
+    "sequelize": "^6.37.1",
+    "twilio": "^5.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -50,6 +55,8 @@
     "html-webpack-plugin": "^5.5.3",
     "nodemon": "^3.0.1",
     "style-loader": "^0.23.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "url-loader": "~4.0.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^4.3.0",

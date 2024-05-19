@@ -22,7 +22,7 @@ module.exports = function(app) {
   router.get("/:username/cameras", controller.findCamera);
 
   //Add cameras associated with username
-  router.post("/:username/cameras/:ip_address", controller.addCamera);
+  router.post("/:username/cameras/:id", controller.addCamera);
 
   // // Delete a User with username 
   // router.delete("/:username", controller.delete);

@@ -1,6 +1,11 @@
 var bcrypt = require("bcryptjs");
 module.exports = (sequelize, Sequelize) => {
   const Camera = sequelize.define("camera", {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      field:'id'
+    },
     name: {
       type: Sequelize.STRING(60),
       field:'name'
@@ -11,7 +16,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     ip_address: {
       type: Sequelize.STRING(60),
-      primaryKey: true,
       field:'ip_address'
     }
   },{

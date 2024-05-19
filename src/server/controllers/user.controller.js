@@ -185,6 +185,10 @@ exports.findAll = (req, res) => {
   if(req.query.last_name) {
     where['last_name'] = {[Op.like]: req.query.last_name};
   }
+
+  if(req.query.phone) {
+    where['phone'] = {[Op.eq]: req.query.phone};
+  }
   User.findAll(
     {where}
   )
@@ -227,15 +231,18 @@ exports.findAll = (req, res) => {
 
 
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const username = req.params.username;
 
   const updateFields = {
     first_name: req.body.first_name ? req.body.first_name : undefined,
     last_name: req.body.last_name ? req.body.last_name : undefined,
-    password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : undefined
+    password: req.body.password ? bcrypt.hashSync(req.body.password, 8) : undefined,
+    phone: req.body.phone ? req.body.phone : undefined
     // Add more fields as needed
   };
+
+
   
   const updatedValues = Object.keys(updateFields).reduce((acc, key) => {
     if (updateFields[key] !== undefined) {
@@ -243,28 +250,42 @@ exports.update = (req, res) => {
     }
     return acc;
   }, {});
-  User.update(
-    updatedValues, 
-    {
-      where: { username: username },
-    }
-  )
-    .then(num => {
-      if (num == 1) {
-        res.status(200).send({
-          message: "User was updated successfully."
-        });
-      } else {
-        res.status(500).send({
-          message: `Cannot update User with username=${username}. Maybe User was not found or req.body is empty!`
-        });
+
+  const checkDuplicate = await User.findOne({ 
+    where: {
+        phone: {
+            [Op.eq]: req.body.phone
+        }
+    } });
+
+  if (checkDuplicate) {
+      res.status(409).send({ message: "This phone is already in use." });
+  }
+
+  else{
+    User.update(
+      updatedValues, 
+      {
+        where: { username: username },
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating User with username=" + username
+    )
+      .then(num => {
+        if (num == 1) {
+          res.status(200).send({
+            message: "User was updated successfully."
+          });
+        } else {
+          res.status(500).send({
+            message: `Cannot update User with username=${username}. Maybe User was not found or req.body is empty!`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error updating User with username=" + username
+        });
       });
-    });
+  }    
 };
 
 exports.findCamera = (req, res) => {
@@ -294,7 +315,7 @@ exports.findCamera = (req, res) => {
 exports.addCamera = (req, res) => {
   
   const username=req.params.username;
-  const ip_address=req.params.ip_address;
+  const id=req.params.id;
 
   User.findByPk(username)
     .then((user) => {
@@ -302,7 +323,7 @@ exports.addCamera = (req, res) => {
         res.status(500).send("User not found!");
         
       }
-      return Camera.findByPk(ip_address).then((camera) => {
+      return Camera.findByPk(id).then((camera) => {
         if (!camera) {
           res.status(500).send("Camera not found!");
           
@@ -310,7 +331,7 @@ exports.addCamera = (req, res) => {
 
 
         user.addCamera(camera);
-        res.status(200).send({message:`Added camera ip_address=${ip_address} to user username=${username}`});
+        res.status(200).send({message:`Added camera id=${id} to user username=${username}`});
         
       });
     })

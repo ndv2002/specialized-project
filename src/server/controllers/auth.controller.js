@@ -15,6 +15,7 @@ exports.signup = (req, res) => {
     last_name: req.body.last_name,
     password: bcrypt.hashSync(req.body.password, 8),
     username: req.body.username,
+    phone: req.body.phone,
     role: req.body.role
   })
     .then(user => {
@@ -45,7 +46,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
   User.findOne({
     where: {
-      Username: req.body.Username
+      username: req.body.username
     }
   })
     .then(user => {
@@ -54,8 +55,8 @@ exports.signin = (req, res) => {
       }
 
       var passwordIsValid = bcrypt.compareSync(
-        req.body.Password,
-        user.Password
+        req.body.password,
+        user.password
       );
 
       if (!passwordIsValid) {
@@ -76,11 +77,11 @@ exports.signin = (req, res) => {
       var authorities = [];
       user.getRoles().then(roles => {
         for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].Name.toUpperCase());
+          authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
         res.status(200).send({
-          Username: user.Username,
-          Roles: authorities,
+          username: user.username,
+          roles: authorities,
           accessToken: token
         });
       });

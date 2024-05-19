@@ -39,13 +39,13 @@ db.user.belongsToMany(db.role, {
 
 db.camera.belongsToMany(db.user, {
   through: "users_cameras",
-  foreignKey: "camera_sensor_ip",
+  foreignKey: "camera_sensor_id",
   otherKey: "username"
 });
 db.user.belongsToMany(db.camera, {
   through: "users_cameras",
   foreignKey: "username",
-  otherKey: "camera_sensor_ip"
+  otherKey: "camera_sensor_id"
 });
 
 
