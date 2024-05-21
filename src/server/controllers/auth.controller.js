@@ -66,7 +66,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      const token = jwt.sign({ Username: user.Username },
+      const token = jwt.sign({ username: user.username },
                               config.secret,
                               {
                                 algorithm: 'HS256',

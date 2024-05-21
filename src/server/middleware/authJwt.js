@@ -20,7 +20,7 @@ verifyToken = (req, res, next) => {
                   message: "Unauthorized!",
                 });
               }
-              req.Username = decoded.Username;
+              req.username = decoded.username;
               next();
             });
 };
