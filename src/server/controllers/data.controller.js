@@ -46,10 +46,10 @@ exports.create = async(req, res) => {
   //   if (err) {;
   //     return res.status(500).json({ message: err.message });
   //   }};
-    json=JSON.parse(req.body.json);
-    camera_id  = json['camera_id'];
-    start_time  = json['start_time'];
-    time=start_time.replace(/-/g, "").replace(/:/g, "").replace(/\s/g,"");
+    let json=JSON.parse(req.body.json);
+    let camera_id  = json['camera_id'];
+    let start_time  = json['start_time'];
+    let time=start_time.replace(/-/g, "").replace(/:/g, "").replace(/\s/g,"");
     const name = req.file.originalname;
     const extension = path.extname(name);
     // Construct the filename based on the camera_id and the file extension
@@ -121,79 +121,28 @@ exports.create = async(req, res) => {
 
 
 
-
-
-
-
-exports.update = async(req, res) => {
-  const id = req.params.id;
-
-  const updateFields = {
-    name: req.body.name ? req.body.name : undefined,
-    location: req.body.location ? req.body.location : undefined,
-    ip_address: req.body.ip_address ? req.body.ip_address : undefined
-    // Add more fields as needed
-  };
-  
-  const updatedValues = Object.keys(updateFields).reduce((acc, key) => {
-    if (updateFields[key] !== undefined) {
-      acc[key] = updateFields[key];
+exports.getFile = async(req, res) => {
+  try {
+    const filename = req.params.filename;
+    if (!filename) {
+      return res.status(400).json({ message: 'Missing filename in request params' });
     }
-    return acc;
-  }, {});
 
-
+    const filePath = path.resolve(path.dirname(path.dirname(__dirname)),'storage', filename);
     
-    Camera.update(
-        updatedValues, 
-        {
-        where: { id: id },
-        }
-    )
-        .then(num => {
-        if (num == 1) {
-            res.status(200).send({
-            message: "Camera was updated successfully."
-            });
-        } else {
-            res.status(500).send({
-            message: `Cannot update Camera with id=${id}. Maybe Camera was not found or req.body is empty!`
-            });
-        }
-        })
-        .catch(err => {
-        res.status(500).send({
-            message: "Error updating camera with id=" + id
-        });
-        });
-    
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    res.status(200).sendFile(filePath);
+
+  }
+  catch (error) {
+    res.status(500).json({ message: err.message });
+  }
+
 };
-
-exports.findUser = (req, res) => {
-  
-  const id=req.params.id;
-  Camera.findAll({
-    where:{
-        id:{[Op.eq]:id},
-    },
-    include:
-      {                               
-          model: User
-      },
-      
-  })
-    .then(data => {
-      res.status(200).send(data[0]['users']);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving users."
-      });
-    });
-};
-
-
 
 
 

@@ -47,18 +47,12 @@ module.exports = function(app) {
   router.use(bodyParser.json());
 
   
-  // Create camera
+  // Post data to storage
   router.post("/", upload.single('image') , controller.create);
 
-  
+  // Get image from name
+  router.get("/:filename",  controller.getFile);
 
-  
-
-  // // Delete a User with username 
-  // router.delete("/:username", controller.delete);
-
-  // // Delete all Tutorials
-  // router.delete("/", controller.deleteAll);
 
   app.use('/api/datas', router);
 

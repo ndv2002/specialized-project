@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING(30),
       field:'data_type'
     },
-    camera_id: {
+    camera_sensor_id: {
       type: Sequelize.INTEGER,
       field:'camera_sensor_id'
     },

@@ -50,7 +50,7 @@ db.user.belongsToMany(db.camera, {
   otherKey: "camera_sensor_id"
 });
 
-db.camera.hasMany(db.data, { foreignKey: 'id' });
+db.camera.hasMany(db.data, { foreignKey: 'camera_sensor_id' });
 db.data.belongsTo(db.camera, { foreignKey: 'camera_sensor_id' });
 
 db.data.hasMany(db.notification, { foreignKey: 'data_link' });

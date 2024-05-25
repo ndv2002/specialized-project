@@ -19,7 +19,10 @@ module.exports = function(app) {
   router.put("/:username", controller.update);
 
   //Retrieve all cameras associated with username
-  router.get("/:username/cameras", controller.findCamera);
+  router.get("/:username/cameras", controller.findCameras);
+
+  //Retrieve all notifications associated with username
+  router.get("/:username/notifications", controller.findNotifications);
 
   //Add cameras associated with username
   router.post("/:username/cameras/:id", controller.addCamera);

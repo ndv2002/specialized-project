@@ -2,6 +2,8 @@
 const db = require("../models");
 const Camera = db.camera;
 const User = db.user;
+const Notification  = db.notification;
+const Data = db.data;
 const Op = db.Sequelize.Op;
 
 checkDuplicateIPAddress = (req, res, next) => {
@@ -135,7 +137,7 @@ exports.update = async(req, res) => {
     
 };
 
-exports.findUser = (req, res) => {
+exports.findUsers = (req, res) => {
   
   const id=req.params.id;
   Camera.findAll({
@@ -157,6 +159,54 @@ exports.findUser = (req, res) => {
           err.message || "Some error occurred while retrieving users."
       });
     });
+};
+
+exports.findNotifications = (req, res) => {
+  
+  const camera_id=req.params.id;
+  Camera.findByPk(camera_id)
+  .then((camera)=> {
+      if (!camera) {
+        res.status(500).send({message: "Camera with id = " + camera_id + " not found."});
+      }
+      return ;
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message 
+    });
+  });
+
+  Data.findAll({
+    where:{
+        camera_sensor_id:camera_id
+    },
+    include:
+      {                               
+          model: Notification
+      },
+      
+  })
+  .then((data) => {
+    jsonData = JSON.stringify(data);
+    jsonData = JSON.parse(jsonData);
+    result=[];
+    jsonData.forEach(element => {
+      if (element.hasOwnProperty("notifications")) {
+        result = result.concat(element['notifications']); // Concatenate the key
+      }
+    });
+    res.status(200).send(result);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving users."
+    });
+  });
+
+  
 };
 
 // exports.delete = (req, res) => {

@@ -3,6 +3,7 @@ const db = require("../models");
 const User = db.user;
 const Camera=db.camera;
 const Op = db.Sequelize.Op;
+const Notification = db.notification;
 var bcrypt = require("bcryptjs");
 // // Create and Save a new Tutorial
 // exports.create = (req, res) => {
@@ -288,7 +289,7 @@ exports.update = async (req, res) => {
   }    
 };
 
-exports.findCamera = (req, res) => {
+exports.findCameras = (req, res) => {
   
   const username=req.params.username;
   User.findAll({
@@ -338,6 +339,43 @@ exports.addCamera = (req, res) => {
     .catch((err) => {
       res.status(500).send(">> Error while adding camera to user: ", err);
     });
+};
+
+exports.findNotifications = (req, res) => {
+  
+  const username=req.params.username;
+  User.findByPk(username)
+  .then((user)=> {
+      if (!user) {
+        res.status(500).send({message: "User with username = " + username + " not found."});
+      }
+      return ;
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message 
+    });
+  });
+
+  Notification.findAll({
+    where:{
+        username:username
+    },
+  })
+  .then((data) => {
+    jsonData = JSON.stringify(data);
+    jsonData = JSON.parse(jsonData);
+    res.status(200).send(jsonData);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving users."
+    });
+  });
+
+  
 };
 
 // exports.delete = (req, res) => {

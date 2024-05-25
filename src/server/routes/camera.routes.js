@@ -21,11 +21,15 @@ module.exports = function(app) {
 
   router.get("/", controller.findAll);
 
-  // Update a camera with ip_address
+  // Update a camera with id
   router.put("/:id", controller.update);
 
-  //Retrieve all users associated with camera by ip address
-  router.get("/:id/users", controller.findUser);
+  //Retrieve all users associated with camera by id
+  router.get("/:id/users", controller.findUsers);
+  //Retrieve all notifications associated with camera by id
+  router.get("/:id/notifications", controller.findNotifications);
+
+
 
   
 
