@@ -9,7 +9,9 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
       username: req.body.username
     }
   }).then(user => {
+    
     if (user) {
+
       res.status(400).send({
         message: "Failed! Username is already in use!"
       });
@@ -18,6 +20,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     next();
     
   });
+
 };
 
 checkRolesExisted = (req, res, next) => {
@@ -31,6 +34,7 @@ checkRolesExisted = (req, res, next) => {
     }
     
   }
+  
   
   next();
 };

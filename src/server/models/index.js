@@ -25,6 +25,8 @@ db.sequelize = sequelize;
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.camera = require("../models/camera.model.js")(sequelize, Sequelize);
+db.data= require("../models/data.model.js")(sequelize, Sequelize);
+db.notification= require("../models/notification.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "users_roles",
@@ -47,6 +49,15 @@ db.user.belongsToMany(db.camera, {
   foreignKey: "username",
   otherKey: "camera_sensor_id"
 });
+
+db.camera.hasMany(db.data, { foreignKey: 'id' });
+db.data.belongsTo(db.camera, { foreignKey: 'camera_sensor_id' });
+
+db.data.hasMany(db.notification, { foreignKey: 'data_link' });
+db.notification.belongsTo(db.data, { foreignKey: 'data_link' });
+
+db.user.hasMany(db.notification, { foreignKey: 'username' });
+db.notification.belongsTo(db.user, { foreignKey: 'username' });
 
 
 db.ROLES = ["User", "Admin"];

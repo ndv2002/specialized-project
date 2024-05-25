@@ -2,26 +2,24 @@ var bcrypt = require("bcryptjs");
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define("user", {
     first_name: {
-      type: Sequelize.STRING(255),
+      type: Sequelize.STRING,
       field:'first_name'
     },
     last_name: {
-      type: Sequelize.STRING(255),
+      type: Sequelize.STRING,
       field:'last_name'
     },
     username: {
-      type: Sequelize.STRING(255),
+      type: Sequelize.STRING,
       primaryKey: true,
       field:'username'
     },
     password: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
+      type: Sequelize.STRING,
       field:'password'
     },
     phone: {
-      type: Sequelize.STRING(255),
-      allowNull: false,
+      type: Sequelize.STRING,
       field:'phone'
     },
   },{
@@ -35,10 +33,10 @@ module.exports = (sequelize, Sequelize) => {
     updatedAt: false
   });
 
-  User.addHook(
-    "beforeUpdate",
-    user => (user.password = bcrypt.hashSync(user.Password, 8))
-  );
+  // User.addHook(
+  //   "beforeUpdate",
+  //   user => (user.password = bcrypt.hashSync(user.Password, 8))
+  // );
 
   return User;
 };

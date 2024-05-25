@@ -10,13 +10,14 @@ var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
+
+
   User.create({
     first_name:req.body.first_name,
-    last_name: req.body.last_name,
-    password: bcrypt.hashSync(req.body.password, 8),
-    username: req.body.username,
-    phone: req.body.phone,
-    role: req.body.role
+    // last_name:req.body.last_name,
+    username:req.body.username,
+    password: bcrypt.hashSync(req.body.password,8),
+    phone:req.body.phone
   })
     .then(user => {
       if (req.body.role) {
@@ -39,7 +40,7 @@ exports.signup = (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).send({ message: err.message });
+      res.status(500).send({ message: err.message, stack:err.stack, name: err.name });
     });
 };
 

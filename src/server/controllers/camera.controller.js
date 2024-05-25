@@ -45,37 +45,37 @@ exports.create = async(req, res) => {
 
  
     Camera.create(camera)
-        .then(data => {
-        res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
-        })
-        .catch(err => {
-        res.status(500).send({
-            message:
-            err.message || "Some error occurred while creating the camera."
-        });
-        });
+    .then(data => {
+    res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
+    })
+    .catch(err => {
+    res.status(500).send({
+        message:
+        err.message || "Some error occurred while creating the camera."
+    });
+    });
     
 };
 
 exports.findAll = (req, res) => {
   
-  let where = {};
+    let where = {};
 
-  if(req.query.ip_address) {
-    where['ip_address'] = {[Op.eq]: req.query.ip_address};
-  }
+    if(req.query.ip_address) {
+      where['ip_address'] = {[Op.eq]: req.query.ip_address};
+    }
 
-  if(req.query.name) {
-    where['name'] = {[Op.like]:'%' + req.query.name + '%' };
-  }
+    if(req.query.name) {
+      where['name'] = {[Op.like]:'%' + req.query.name + '%' };
+    }
 
-  if(req.query.location) {
-    where['location'] = {[Op.like]:'%' +  req.query.location + '%'};
-  }
+    if(req.query.location) {
+      where['location'] = {[Op.like]:'%' +  req.query.location + '%'};
+    }
 
-  Camera.findAll(
-    {where}
-  )
+    Camera.findAll(
+      {where}
+    )
     .then(data => {
       res.status(200).send(data);
     })

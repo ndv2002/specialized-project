@@ -14,25 +14,114 @@
 //     .then((message) => console.log(message.sid));
 // };    
 const fetch = require('node-fetch');
+const db = require("../models");
+const Camera = db.camera;
+const User = db.user;
+const Data=db.data;
+const Notification=db.notification;
+const Op = db.Sequelize.Op;
 
 let apiKey = "QDLf6lCNn-UAQyE5N_yf_Oqy3ISc_o6ROYm_5ik8xDXaBTF6JjShmF_g70FO0Nwu";
 
 exports.send = async(req, res) => {
-  fetch('https://api.httpsms.com/v1/messages/send', {
-      method: 'POST',
-      headers: {
-          'x-api-key': apiKey,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-          "content": "This is a sample text message",
-          "from": "+84782359468",
-          "to": "+84856729103"
-      })
-  })
-  .then(res => res.json())
-  .then((data) => console.log(data));
+    
+    const camera_name = await Camera.findByPk(
+        req.body.camera_id
+    )
+    .then((camera) => {
+        return camera.name;
+    })
+    .catch(function (err) {
+        res.status(500).send({
+            message:
+            err.message 
+        });
+    });  
+    
+ 
+    
+    Camera.findAll({
+        where:{
+            id:req.body.camera_id
+        },
+        include:User
+    })
+    .then(function(userList){
+        for (const keys of userList) {
+            // Check if the "users" key exists
+            if ('users' in keys && keys.users.length > 0 ) {
+              // Iterate over the "users" array
+              for (const user of keys.users) {
+                    Notification.create({
+                        data_link:req.body.data_link,
+                        username:user.username,
+                        time:req.body.time,
+                        content:"Fire in " + camera_name + " at " + req.body.time + "."
+
+                    })
+                    .then(data => {
+                        
+                    })    
+                    .catch(err => {
+                        console.log("notification create error:"+err.message);
+                        
+                        });
+                    phoneNumber=user.phone
+                    if (phoneNumber.startsWith("0")) {
+                        // Remove leading 0 and add "+84"
+                        phoneNumber = "+84" + phoneNumber.slice(1);
+                    } else if (phoneNumber.startsWith("84")) {
+                    // Add "+" if it starts with 84
+                    phoneNumber = "+" + phoneNumber;
+                    } else if (!phoneNumber.startsWith("0")){
+                    // Add "+84" if it doesn't start with 0 or 84
+                        phoneNumber =  "+84" + phoneNumber;
+                    }
+                        
+                    fetch('https://api.httpsms.com/v1/messages/send', {
+                        method: 'POST',
+                        headers: {
+                            'x-api-key': apiKey,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "content": "Fire in " + camera_name + " at " + req.body.time + ".",
+                            "from": "+84782359468",
+                            "to": phoneNumber
+                        })
+                    })
+                    .then(res => res.json())
+                    .then((data) => console.log(data));
+              }
+            }
+        }
+    })
+    .catch(function (err) {
+        res.status(500).send({
+            message:
+            err.message 
+        });
+    });
+    // console.log("user lists:"+JSON.stringify(userList));
+   
+
+
+//   fetch('https://api.httpsms.com/v1/messages/send', {
+//       method: 'POST',
+//       headers: {
+//           'x-api-key': apiKey,
+//           'Accept': 'application/json',
+//           'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({
+//           "content": "This is a sample text message",
+//           "from": "+84782359468",
+//           "to": "+84856729103"
+//       })
+//   })
+//   .then(res => res.json())
+//   .then((data) => console.log(data));
 };
 
 // const { Vonage } = require('@vonage/server-sdk')
