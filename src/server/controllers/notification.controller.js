@@ -91,7 +91,7 @@ exports.send = async(req, res) => {
                             "to": phoneNumber
                         })
                     })
-                    .then(res =>{})
+                    .then(response =>{})
                     .then((data) => {});
               }
             }
