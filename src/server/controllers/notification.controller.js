@@ -63,9 +63,9 @@ exports.send = async(req, res) => {
                         
                     })    
                     .catch(err => {
+                        console.log("error: "+err.message);
                         
-                        
-                        });
+                    });
                     phoneNumber=user.phone
                     if (phoneNumber.startsWith("0")) {
                         // Remove leading 0 and add "+84"
@@ -92,7 +92,11 @@ exports.send = async(req, res) => {
                         })
                     })
                     .then(response =>{})
-                    .then((data) => {});
+                    .then((data) => {})
+                    .catch(err => {
+                        console.log("error: "+err.message);
+                        
+                    });;
               }
             }
         }

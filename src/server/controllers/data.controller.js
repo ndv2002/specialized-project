@@ -91,7 +91,7 @@ exports.create = async(req, res) => {
     
   })   
   .catch(err => {
-    
+    console.log("error: "+err.message);
       
   });
 
@@ -115,7 +115,7 @@ exports.create = async(req, res) => {
       }
     })
     .catch(error => {
-      
+      console.log("error: "+error.message);
     }); 
   }
   res.status(200).send({message:"Data is posted successfully"});
