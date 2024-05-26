@@ -63,7 +63,7 @@ exports.send = async(req, res) => {
                         
                     })    
                     .catch(err => {
-                        console.log("notification create error:"+err.message);
+                        
                         
                         });
                     phoneNumber=user.phone
@@ -91,8 +91,8 @@ exports.send = async(req, res) => {
                             "to": phoneNumber
                         })
                     })
-                    .then(res => res.json())
-                    .then((data) => console.log(data));
+                    .then(res =>{})
+                    .then((data) => {});
               }
             }
         }

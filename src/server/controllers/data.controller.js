@@ -10,6 +10,11 @@ const FormData = require('form-data');
 const path = require('path')
 
 exports.create = async(req, res) => {
+  let filename;
+  let start_time;
+  let camera_id;
+  let ai_output;
+  let output;
   try {
     // Check if the request contains a JSON body and a file
   //   if (!req.file) {
@@ -47,13 +52,13 @@ exports.create = async(req, res) => {
   //     return res.status(500).json({ message: err.message });
   //   }};
     let json=JSON.parse(req.body.json);
-    let camera_id  = json['camera_id'];
-    let start_time  = json['start_time'];
+    camera_id  = json['camera_id'];
+    start_time  = json['start_time'];
     let time=start_time.replace(/-/g, "").replace(/:/g, "").replace(/\s/g,"");
     const name = req.file.originalname;
     const extension = path.extname(name);
     // Construct the filename based on the camera_id and the file extension
-    const filename = `${camera_id}_${time}${extension}`;
+    filename = `${camera_id}_${time}${extension}`;
     image_path=path.resolve(path.dirname(path.dirname(__dirname)),'storage',filename);
     const formData = new FormData();
     formData.append('image', fs.createReadStream(image_path)); // Create a read stream
@@ -63,60 +68,58 @@ exports.create = async(req, res) => {
         'Content-Type': 'multipart/form-data' // Set appropriate content type
       }
     });
-    const output = response.data['value'];
-    const ai_output = output > 70 ? 1 : 0;
-    
-    
+    output = response.data['value'];
+    ai_output = output > 70 ? 1 : 0;
 
-    Data.create({
-        data_link:filename,
-        data_type:"image",
-        camera_sensor_id:camera_id,
-        start_time:start_time,
-        ai_output:ai_output,
-        probability: output
-
-    })
-    .then(data => {
-      
-    })
-        
-    .catch(err => {
-      console.log("data create error:"+err.message);
-        
-    });
-
-    if(ai_output){
-      const postData={
-        camera_id:camera_id,
-        data_link:filename,
-        time:start_time
-
-      }
-    
-        
-    
-      const axiosInstance = axios.create({
-        baseURL: 'http://localhost:8080', // Replace with your server address
-      }); // Optional: Create an Axios instance with base URL
-      
-      axiosInstance.post('/api/notifications', postData, {
-        headers: {
-          'Content-Type': 'application/json' // Set the Content-Type header
-        }
-      })
-      .catch(error => {
-        res.status(500).send({message: error.message});
-      }); 
-    }
-    res.status(200).send({message:"Data is posted successfully"});         
- 
-    
-   
   } 
   catch (error) {
     return res.status(500).send({ message: error.message });
   }   
+
+
+  
+  Data.create({
+    data_link:filename,
+    data_type:"image",
+    camera_sensor_id:camera_id,
+    start_time:start_time,
+    ai_output:ai_output,
+    probability: output
+
+  })
+  .then(data => {
+    
+  })
+      
+  .catch(err => {
+    console.log("data create error:"+err.message);
+      
+  });
+
+  if(ai_output){
+    const postData={
+      camera_id:camera_id,
+      data_link:filename,
+      time:start_time
+
+    }
+
+      
+
+    const axiosInstance = axios.create({
+      baseURL: 'http://localhost:8080', // Replace with your server address
+    }); // Optional: Create an Axios instance with base URL
+    
+    axiosInstance.post('/api/notifications', postData, {
+      headers: {
+        'Content-Type': 'application/json' // Set the Content-Type header
+      }
+    })
+    .catch(error => {
+      res.status(500).send({message: error.message});
+    }); 
+  }
+  res.status(200).send({message:"Data is posted successfully"});
     
 };
 
