@@ -321,12 +321,12 @@ exports.addCamera = (req, res) => {
   User.findByPk(username)
     .then((user) => {
       if (!user) {
-        res.status(500).send("User not found!");
+        res.status(500).send({message:"User not found!"});
         
       }
       return Camera.findByPk(id).then((camera) => {
         if (!camera) {
-          res.status(500).send("Camera not found!");
+          res.status(500).send({message: "Camera not found!"});
           
         }
 
@@ -371,13 +371,41 @@ exports.findNotifications = (req, res) => {
   .catch(err => {
     res.status(500).send({
       message:
-        err.message || "Some error occurred while retrieving users."
+        err.message 
     });
   });
 
   
 };
 
+
+exports.removeCamera = (req, res) => {
+  
+  const username=req.params.username;
+  const id=req.params.id;
+
+  User.findByPk(username)
+    .then((user) => {
+      if (!user) {
+        res.status(500).send({message:"User not found!"});
+        
+      }
+      return Camera.findByPk(id).then((camera) => {
+        if (!camera) {
+          res.status(500).send({message: "Camera not found!"});
+          
+        }
+
+
+        user.addCamera(camera);
+        res.status(200).send({message:`Added camera id=${id} to user username=${username}`});
+        
+      });
+    })
+    .catch((err) => {
+      res.status(500).send(">> Error while adding camera to user: ", err);
+    });
+};
 // exports.delete = (req, res) => {
 //   const Username = req.params.username;
 

@@ -73,7 +73,8 @@ exports.create = async(req, res) => {
         data_type:"image",
         camera_sensor_id:camera_id,
         start_time:start_time,
-        ai_output:ai_output
+        ai_output:ai_output,
+        probability: output
 
     })
     .then(data => {

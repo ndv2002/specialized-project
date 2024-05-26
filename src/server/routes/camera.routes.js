@@ -28,6 +28,8 @@ module.exports = function(app) {
   router.get("/:id/users", controller.findUsers);
   //Retrieve all notifications associated with camera by id
   router.get("/:id/notifications", controller.findNotifications);
+  //Retrieve all datas associated with camera by id
+  router.get("/:id/datas", controller.findDatas);
 
 
 

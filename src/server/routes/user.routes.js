@@ -27,6 +27,9 @@ module.exports = function(app) {
   //Add cameras associated with username
   router.post("/:username/cameras/:id", controller.addCamera);
 
+  //Remove cameras associated with username
+  router.delete("/:username/cameras/:id", controller.removeCamera);
+
   // // Delete a User with username 
   // router.delete("/:username", controller.delete);
 

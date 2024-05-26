@@ -25,6 +25,10 @@ module.exports = (sequelize, Sequelize) => {
     ai_output:{
         type:Sequelize.BOOLEAN,
         field:'ai_output'
+    },
+    probability:{
+      type:Sequelize.DOUBLE,
+      field:'probability'
     }
   },{
     tableName: 'datas',
