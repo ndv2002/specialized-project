@@ -106,7 +106,7 @@ exports.create = async(req, res) => {
       
 
     const axiosInstance = axios.create({
-      baseURL: 'http://localhost:8080', // Replace with your server address
+      baseURL: 'http://127.0.0.1:8080', // Replace with your server address
     }); // Optional: Create an Axios instance with base URL
     
     axiosInstance.post('/api/notifications', postData, {
