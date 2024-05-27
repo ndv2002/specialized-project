@@ -102,10 +102,7 @@ exports.send = async(req, res) => {
         }
     })
     .catch(function (err) {
-        res.status(500).send({
-            message:
-            err.message 
-        });
+        console.log("error: "+err.message);
     });
     // console.log("user lists:"+JSON.stringify(userList));
    
