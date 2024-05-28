@@ -25,7 +25,7 @@
 //   }
 // };
 module.exports = {
-  HOST: "db-mysql-sgp1-37553-do-user-16686291-0.c.db.ondigitalocean.com:25060",
+  HOST: "db-mysql-sgp1-37553-do-user-16686291-0.c.db.ondigitalocean.com",
   USER: "doadmin",
   PASSWORD: "AVNS_ztnIGOkqeN954jmyJV5",
   DB: "defaultdb",
