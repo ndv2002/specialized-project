@@ -282,9 +282,7 @@ exports.update = async (req, res) => {
         }
       })
       .catch(err => {
-        res.status(500).send({
-          message: "Error updating User with username=" + username
-        });
+        
       });
   }    
 };
@@ -321,12 +319,12 @@ exports.addCamera = (req, res) => {
   User.findByPk(username)
     .then((user) => {
       if (!user) {
-        res.status(500).send({message:"User not found!"});
+        return ;
         
       }
       return Camera.findByPk(id).then((camera) => {
         if (!camera) {
-          res.status(500).send({message: "Camera not found!"});
+          return ;
           
         }
 
@@ -352,10 +350,7 @@ exports.findNotifications = (req, res) => {
       return ;
   })
   .catch(err => {
-    res.status(500).send({
-      message:
-        err.message 
-    });
+    
   });
 
   Notification.findAll({
@@ -387,12 +382,12 @@ exports.removeCamera = (req, res) => {
   User.findByPk(username)
     .then((user) => {
       if (!user) {
-        res.status(500).send({message:"User not found!"});
+        return ;
         
       }
       return Camera.findByPk(id).then((camera) => {
         if (!camera) {
-          res.status(500).send({message: "Camera not found!"});
+          return ;
           
         }
 

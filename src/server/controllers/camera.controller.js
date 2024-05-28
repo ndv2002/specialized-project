@@ -130,9 +130,7 @@ exports.update = async(req, res) => {
         }
         })
         .catch(err => {
-        return res.status(500).send({
-            message: "Error updating camera with id=" + id
-        });
+        
         });
     
 };
@@ -172,10 +170,7 @@ exports.findNotifications = (req, res) => {
    
   })
   .catch(err => {
-    return res.status(500).send({
-      message:
-        err.message 
-    });
+    
   });
 
   Data.findAll({
@@ -221,10 +216,7 @@ exports.findDatas = (req, res) => {
       
   })
   .catch(err => {
-    return res.status(500).send({
-      message:
-        err.message 
-    });
+    
   });
 
   Data.findAll({
