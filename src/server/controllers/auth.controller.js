@@ -80,7 +80,7 @@ exports.signin = (req, res) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
-        res.status(200).send({
+        return res.status(200).send({
           username: user.username,
           roles: authorities,
           accessToken: token
@@ -88,6 +88,6 @@ exports.signin = (req, res) => {
       });
     })
     .catch(err => {
-      res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: err.message });
     });
 };

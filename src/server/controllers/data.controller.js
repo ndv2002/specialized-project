@@ -91,7 +91,7 @@ exports.create = async(req, res) => {
     
   })   
   .catch(err => {
-    console.log("error: "+err.message);
+    return res.status(500).send({ message: error.message });
       
   });
 
@@ -115,10 +115,10 @@ exports.create = async(req, res) => {
       }
     })
     .catch(error => {
-      console.log("error: "+error.message);
+      return res.status(500).send({ message: error.message });
     }); 
   }
-  res.status(200).send({message:"Data is posted successfully"});
+  return res.status(200).send({message:"Data is posted successfully"});
     
 };
 
@@ -138,11 +138,11 @@ exports.getFile = async(req, res) => {
       return res.status(404).json({ message: 'File not found' });
     }
 
-    res.status(200).sendFile(filePath);
+    return res.status(200).sendFile(filePath);
 
   }
   catch (error) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 
 };

@@ -14,10 +14,10 @@ checkDuplicateIPAddress = (req, res, next) => {
       }
     }).then(camera => {
       if (camera) {
-        res.status(400).send({
+        return res.status(400).send({
           message: "Failed! IP address is already in use!"
         });
-        return;
+        
       }
       next();
       
@@ -48,10 +48,10 @@ exports.create = async(req, res) => {
  
     Camera.create(camera)
     .then(data => {
-    res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
+    return res.status(200).send({message: `New camera with ip_address=${req.body.ip_address} was added successfully.`});
     })
     .catch(err => {
-    res.status(500).send({
+    return res.status(500).send({
         message:
         err.message || "Some error occurred while creating the camera."
     });
@@ -79,12 +79,12 @@ exports.findAll = (req, res) => {
       {where}
     )
     .then(data => {
-      res.status(200).send(data);
+      return res.status(200).send(data);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving cameras."
+          err.message 
       });
     });
 };
@@ -120,17 +120,17 @@ exports.update = async(req, res) => {
     )
         .then(num => {
         if (num == 1) {
-            res.status(200).send({
+            return res.status(200).send({
             message: "Camera was updated successfully."
             });
         } else {
-            res.status(500).send({
+            return res.status(500).send({
             message: `Cannot update Camera with id=${id}. Maybe Camera was not found or req.body is empty!`
             });
         }
         })
         .catch(err => {
-        res.status(500).send({
+        return res.status(500).send({
             message: "Error updating camera with id=" + id
         });
         });
@@ -151,10 +151,10 @@ exports.findUsers = (req, res) => {
       
   })
     .then(data => {
-      res.status(200).send(data[0]['users']);
+      return res.status(200).send(data[0]['users']);
     })
     .catch(err => {
-      res.status(500).send({
+      return res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving users."
       });
@@ -167,12 +167,12 @@ exports.findNotifications = (req, res) => {
   Camera.findByPk(camera_id)
   .then((camera)=> {
       if (!camera) {
-        res.status(500).send({message: "Camera with id = " + camera_id + " not found."});
+        return res.status(500).send({message: "Camera with id = " + camera_id + " not found."});
       }
-      return ;
+   
   })
   .catch(err => {
-    res.status(500).send({
+    return res.status(500).send({
       message:
         err.message 
     });
@@ -197,10 +197,10 @@ exports.findNotifications = (req, res) => {
         result = result.concat(element['notifications']); // Concatenate the key
       }
     });
-    res.status(200).send(result);
+    return res.status(200).send(result);
   })
   .catch(err => {
-    res.status(500).send({
+    return res.status(500).send({
       message:
         err.message 
     });
@@ -216,12 +216,12 @@ exports.findDatas = (req, res) => {
   Camera.findByPk(camera_id)
   .then((camera)=> {
       if (!camera) {
-        res.status(500).send({message: "Camera with id = " + camera_id + " not found."});
+        return res.status(500).send({message: "Camera with id = " + camera_id + " not found."});
       }
-      return ;
+      
   })
   .catch(err => {
-    res.status(500).send({
+    return res.status(500).send({
       message:
         err.message 
     });
@@ -235,10 +235,10 @@ exports.findDatas = (req, res) => {
   })
   .then((data) => {
     
-    res.status(200).send(data);
+    return res.status(200).send(data);
   })
   .catch(err => {
-    res.status(500).send({
+    return res.status(500).send({
       message:
         err.message 
     });

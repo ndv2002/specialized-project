@@ -32,7 +32,7 @@ exports.send = async(req, res) => {
         return camera.name;
     })
     .catch(function (err) {
-        res.status(500).send({
+        return res.status(500).send({
             message:
             err.message 
         });
@@ -63,7 +63,7 @@ exports.send = async(req, res) => {
                         
                     })    
                     .catch(err => {
-                        console.log("error: "+err.message);
+                        return res.status(500).send({ message: error.message });
                         
                     });
                     phoneNumber=user.phone
@@ -94,7 +94,7 @@ exports.send = async(req, res) => {
                     .then(response =>{})
                     .then((data) => {})
                     .catch(err => {
-                        console.log("error: "+err.message);
+                        return res.status(500).send({ message: error.message });
                         
                     });;
               }
@@ -102,7 +102,7 @@ exports.send = async(req, res) => {
         }
     })
     .catch(function (err) {
-        console.log("error: "+err.message);
+        return res.status(500).send({ message: error.message });
     });
     // console.log("user lists:"+JSON.stringify(userList));
    
