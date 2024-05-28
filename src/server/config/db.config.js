@@ -26,6 +26,7 @@
 // };
 module.exports = {
   HOST: "db-mysql-sgp1-37553-do-user-16686291-0.c.db.ondigitalocean.com",
+  PORT: "25060",
   USER: "doadmin",
   PASSWORD: "AVNS_ztnIGOkqeN954jmyJV5",
   DB: "defaultdb",
