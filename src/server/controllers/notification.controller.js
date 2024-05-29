@@ -75,25 +75,25 @@ exports.send = async(req, res) => {
                         phoneNumber =  "+84" + phoneNumber;
                     }
                         
-                    fetch('https://api.httpsms.com/v1/messages/send', {
-                        method: 'POST',
-                        headers: {
-                            'x-api-key': apiKey,
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            "content": "Fire in " + camera_name + " at " + req.body.time + ".",
-                            "from": "+84782359468",
-                            "to": phoneNumber
-                        })
-                    })
-                    .then(response =>{})
-                    .then((data) => {})
-                    .catch(err => {
+                    // fetch('https://api.httpsms.com/v1/messages/send', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'x-api-key': apiKey,
+                    //         'Accept': 'application/json',
+                    //         'Content-Type': 'application/json'
+                    //     },
+                    //     body: JSON.stringify({
+                    //         "content": "Fire in " + camera_name + " at " + req.body.time + ".",
+                    //         "from": "+84782359468",
+                    //         "to": phoneNumber
+                    //     })
+                    // })
+                    // .then(response =>{})
+                    // .then((data) => {})
+                    // .catch(err => {
                         
                         
-                    });;
+                    // });;
               }
             }
         }
