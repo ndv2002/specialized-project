@@ -21,7 +21,7 @@ const Data=db.data;
 const Notification=db.notification;
 const Op = db.Sequelize.Op;
 
-let apiKey = "QDLf6lCNn-UAQyE5N_yf_Oqy3ISc_o6ROYm_5ik8xDXaBTF6JjShmF_g70FO0Nwu";
+let apiKey = "shFUMDUuX2xgN5LA56aXSZ-MRTjbVjADS5oE0CNijjKMEISj1G7LQe0o02t-jLqK";
 
 exports.send = async(req, res) => {
     
